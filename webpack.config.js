@@ -31,10 +31,10 @@ module.exports = {
             template: './src/index.html'
         }),
         new ModuleFederationPlugin({
-            name: 'app1',
+            name: 'container',
             filename: 'remoteEntry.js',
             remotes: {
-                app1: 'app1@http://localhost:8500/remoteEntry.js'
+                modal: 'modal@http://localhost:8500/remoteEntry.js'
 
             }
 

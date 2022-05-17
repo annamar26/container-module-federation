@@ -1,22 +1,9 @@
-import ReactDOM from 'react'
-let app1 =
-    import ('app1/App')
-
-var promise = new Promise(function(resolve, reject) {
-    // do a thing, possibly async, then…
+console.log('hola')
 
 
-    resolve(app1);
+const target = document.getElementById('root')
+const renderer = import('modal/Renderer')
+// const promise = new Promise((resolve,reject)=>{
+//     resolve(import('modal/Renderer'))})
 
-});
-
-promise.then(res => {
-    document.getElementById('root').append(res.default.prototype.constructor)
-    console.log(res)
-    const root = ReactDOM.createRoot(
-        document.getElementById('root')
-    );
-    root.render(res);
-})
-
-console.log(promise)
+    renderer.then(res=> res.renderInVanilla(target))
