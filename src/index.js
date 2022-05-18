@@ -1,9 +1,12 @@
-console.log('hola')
+console.log("hola");
 
+const target = document.getElementById("root");
+// const renderer = import('modal/Renderer')
+const angular = import("calendar/Component");
 
-const target = document.getElementById('root')
-const renderer = import('modal/Renderer')
-// const promise = new Promise((resolve,reject)=>{
-//     resolve(import('modal/Renderer'))})
+// renderer.then(res=> res.renderInVanilla(target))
+angular.then((res) => {
+ 
 
-    renderer.then(res=> res.renderInVanilla(target))
+  console.log(res)
+});

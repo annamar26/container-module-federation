@@ -5,11 +5,11 @@ const { ModuleFederationPlugin } = webpack.container;
 
 module.exports = {
     output: {
-        publicPath: 'http://localhost:5000'
+        publicPath: 'auto'
     },
     mode: 'development',
     devServer: {
-        port: 5000,
+        port: 3000,
         open: true
     },
     devtool: 'source-map',
@@ -34,7 +34,8 @@ module.exports = {
             name: 'container',
             filename: 'remoteEntry.js',
             remotes: {
-                modal: 'modal@http://localhost:8500/remoteEntry.js'
+                modal: 'modal@http://localhost:6001/remoteEntry.js',
+                calendar: 'calendar@http://localhost:5000/remoteEntry.js'
 
             }
 

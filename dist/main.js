@@ -3,7 +3,7 @@
 
 /***/ "webpack/container/reference/modal":
 /*!*************************************************************!*\
-  !*** external "modal@http://localhost:8500/remoteEntry.js" ***!
+  !*** external "modal@http://localhost:6001/remoteEntry.js" ***!
   \*************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -11,7 +11,7 @@
 var __webpack_error__ = new Error();
 module.exports = new Promise((resolve, reject) => {
 	if(typeof modal !== "undefined") return resolve();
-	__webpack_require__.l("http://localhost:8500/remoteEntry.js", (event) => {
+	__webpack_require__.l("http://localhost:6001/remoteEntry.js", (event) => {
 		if(typeof modal !== "undefined") return resolve();
 		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
 		var realSrc = event && event.target && event.target.src;
@@ -117,6 +117,18 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 			// return url for filenames based on template
 /******/ 			return "" + chunkId + ".js";
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -290,7 +302,22 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	(() => {
-/******/ 		__webpack_require__.p = "http://localhost:5000";
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
@@ -392,10 +419,10 @@ var __webpack_exports__ = {};
   \**********************/
 console.log('hola');
 const target = document.getElementById('root');
-const promise = new Promise((resolve, reject) => {
-  resolve(__webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23)));
-});
-promise.then(res => console.log(res));
+const renderer = __webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23)); // const promise = new Promise((resolve,reject)=>{
+//     resolve(import('modal/Renderer'))})
+
+renderer.then(res => res.renderInVanilla(target));
 })();
 
 /******/ })()
