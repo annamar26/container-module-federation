@@ -1,18 +1,18 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "webpack/container/reference/modal":
-/*!*************************************************************!*\
-  !*** external "modal@http://localhost:6001/remoteEntry.js" ***!
-  \*************************************************************/
+/***/ "webpack/container/reference/button":
+/*!**************************************************************!*\
+  !*** external "button@http://localhost:4500/remoteEntry.js" ***!
+  \**************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 var __webpack_error__ = new Error();
 module.exports = new Promise((resolve, reject) => {
-	if(typeof modal !== "undefined") return resolve();
-	__webpack_require__.l("http://localhost:6001/remoteEntry.js", (event) => {
-		if(typeof modal !== "undefined") return resolve();
+	if(typeof button !== "undefined") return resolve();
+	__webpack_require__.l("http://localhost:4500/remoteEntry.js", (event) => {
+		if(typeof button !== "undefined") return resolve();
 		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
 		var realSrc = event && event.target && event.target.src;
 		__webpack_error__.message = 'Loading script failed.\n(' + errorType + ': ' + realSrc + ')';
@@ -20,8 +20,8 @@ module.exports = new Promise((resolve, reject) => {
 		__webpack_error__.type = errorType;
 		__webpack_error__.request = realSrc;
 		reject(__webpack_error__);
-	}, "modal");
-}).then(() => (modal));
+	}, "button");
+}).then(() => (button));
 
 /***/ })
 
@@ -196,15 +196,15 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 	/* webpack/runtime/remotes loading */
 /******/ 	(() => {
 /******/ 		var chunkMapping = {
-/******/ 			"webpack_container_remote_modal_Renderer": [
-/******/ 				"webpack/container/remote/modal/Renderer"
+/******/ 			"webpack_container_remote_button_Button": [
+/******/ 				"webpack/container/remote/button/Button"
 /******/ 			]
 /******/ 		};
 /******/ 		var idToExternalAndNameMapping = {
-/******/ 			"webpack/container/remote/modal/Renderer": [
+/******/ 			"webpack/container/remote/button/Button": [
 /******/ 				"default",
-/******/ 				"./Renderer",
-/******/ 				"webpack/container/reference/modal"
+/******/ 				"./Button",
+/******/ 				"webpack/container/reference/button"
 /******/ 			]
 /******/ 		};
 /******/ 		__webpack_require__.f.remotes = (chunkId, promises) => {
@@ -291,7 +291,7 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 			var promises = [];
 /******/ 			switch(name) {
 /******/ 				case "default": {
-/******/ 					initExternal("webpack/container/reference/modal");
+/******/ 					initExternal("webpack/container/reference/button");
 /******/ 				}
 /******/ 				break;
 /******/ 			}
@@ -417,12 +417,17 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-console.log('hola');
-const target = document.getElementById('root');
-const renderer = __webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23)); // const promise = new Promise((resolve,reject)=>{
-//     resolve(import('modal/Renderer'))})
+console.log("hola");
+const target = document.getElementById("root"); // const renderer = import('modal/Renderer')
+// const angular = import("calendar/Component");
 
-renderer.then(res => res.renderInVanilla(target));
+const vanillaButton = __webpack_require__.e(/*! import() */ "webpack_container_remote_button_Button").then(__webpack_require__.t.bind(__webpack_require__, /*! button/Button */ "webpack/container/remote/button/Button", 23)); // renderer.then(res=> res.renderInVanilla(target))
+
+/* angular.then((res) => {
+  console.log(res);
+}); */
+
+vanillaButton.then(res => console.log(res));
 })();
 
 /******/ })()
