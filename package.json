@@ -23,11 +23,10 @@
         "babel-preset-env": "^1.7.0",
         "babel-preset-react": "^6.24.1",
         "clean-webpack-plugin": "^4.0.0",
-
         "html-webpack-plugin": "^5.5.0",
-
         "webpack": "^5.72.1",
         "webpack-cli": "^4.9.2",
-        "webpack-dev-server": "^4.9.0"
+        "webpack-dev-server": "^4.9.0",
+        "windowed-observable": "^1.0.0"
     }
 }

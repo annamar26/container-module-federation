@@ -1,19 +1,24 @@
-console.log("hola");
-
+import { Observable } from "windowed-observable";
 const target = document.getElementById("root");
 const renderer = import("modal/Renderer");
 // const angular = import("calendar/Dist");
 const bootstrap = import("calendar/Bootstrap");
 const vanillaButton = import("button/Button");
+const calendarObservable = new Observable('calendar-date');
+
 
 renderer.then((res) => res.renderInVanilla(target));
-vanillaButton.then((res) => res.render(document.getElementById("rootVanilla")));
+vanillaButton.then((res) => {
+  const { button } = res.buttonF();
+  document.getElementById("rootVanilla").append(button);
+});
 
 bootstrap
   .then((res) => {
+    
+    const { calendar, button } = res.component();
     const target2 = document.getElementById("rootAngular");
-    const el = res.component();
-    el.srcData = [
+    calendar.srcData = [
       {
         AccountName: 'Itexico',
         ActivityDate: '2022-05-06T09:35:04',
@@ -95,7 +100,14 @@ bootstrap
         activeInProject: false,
       },
     ]
-    el.currentDate =new Date()
-    target2.append(el)
+    calendar.currentDate = new Date();
+    calendarObservable.subscribe((date) => {
+      calendar.currentDate = date;
+      console.log(date, calendar.currentDate);
+    });
+    button.style.position = 'fixed';
+    button.style.bottom = '80px';
+    button.style.right = '100px';
+    target2.append(calendar, button)
   })
   .catch((err) => console.log(err.message));
