@@ -6,8 +6,8 @@ const renderer = import("modal/Renderer");
 const bootstrap = import("calendar/Bootstrap");
 const vanillaButton = import("button/Button");
 
-// renderer.then((res) => res.renderInVanilla(target));
-// vanillaButton.then((res) => res.render(document.getElementById("rootVanilla")));
+renderer.then((res) => res.renderInVanilla(target));
+vanillaButton.then((res) => res.render(document.getElementById("rootVanilla")));
 
 bootstrap
   .then((res) => {
@@ -95,6 +95,7 @@ bootstrap
         activeInProject: false,
       },
     ]
+    el.currentDate =new Date()
     target2.append(el)
   })
   .catch((err) => console.log(err.message));
