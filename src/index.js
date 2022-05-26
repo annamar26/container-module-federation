@@ -4,6 +4,7 @@ const renderer = import("modal/Renderer");
 // const angular = import("calendar/Dist");
 const bootstrap = import("calendar/Bootstrap");
 const vanillaButton = import("button/Button");
+const pomodoro = import("pomodoro/Pomodoro");
 const calendarObservable = new Observable('calendar-date');
 
 
@@ -12,6 +13,7 @@ vanillaButton.then((res) => {
   const { button } = res.buttonF();
   document.getElementById("rootVanilla").append(button);
 });
+
 
 bootstrap
   .then((res) => {
@@ -111,3 +113,7 @@ bootstrap
     target2.append(calendar, button)
   })
   .catch((err) => console.log(err.message));
+pomodoro.then(res=>{
+ console.log(res)
+res.mount('#root')
+})

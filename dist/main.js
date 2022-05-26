@@ -1,5 +1,147 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/windowed-observable/dist/windowed-observable.esm.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/windowed-observable/dist/windowed-observable.esm.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Observable": () => (/* binding */ Observable)
+/* harmony export */ });
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+var EVENTS = '__events__';
+var SHARED = '__shared__';
+var OBSERVERS = '__observers__';
+var Observable = /*#__PURE__*/function () {
+  function Observable(namespace) {
+    this.dispatch = this.publish;
+    Observable.initialize();
+    this.namespace = namespace;
+  } // istanbul ignore next
+
+
+  Observable.initialize = function initialize() {
+    if (!window[SHARED]) {
+      var _window$SHARED;
+
+      window[SHARED] = (_window$SHARED = {}, _window$SHARED[EVENTS] = {}, _window$SHARED[OBSERVERS] = {}, _window$SHARED);
+    }
+
+    if (!window[SHARED][EVENTS]) {
+      window[SHARED][EVENTS] = {};
+    }
+
+    if (!window[SHARED][OBSERVERS]) {
+      window[SHARED][OBSERVERS] = {};
+    }
+  };
+
+  var _proto = Observable.prototype;
+
+  _proto.getEvents = function getEvents() {
+    return this.events;
+  };
+
+  _proto.getLastEvent = function getLastEvent() {
+    var events = this.events;
+
+    if (!events.length) {
+      return;
+    }
+
+    var lastEvent = events[events.length - 1];
+    return lastEvent;
+  };
+
+  _proto.publish = function publish(data) {
+    var events = this.events;
+    var lastEvent = this.getLastEvent();
+    this.observers.forEach(function (observer) {
+      return observer(data, {
+        events: events,
+        lastEvent: lastEvent
+      });
+    });
+    this.events.push(data);
+  };
+
+  _proto.subscribe = function subscribe(observer) {
+    this.observers = this.observers.concat(observer);
+  };
+
+  _proto.unsubscribe = function unsubscribe(observer) {
+    this.observers = this.observers.filter(function (obs) {
+      return obs !== observer;
+    });
+  };
+
+  _proto.clear = function clear() {
+    var events = this.events;
+    var lastEvent = this.getLastEvent();
+    this.observers.forEach(function (observer) {
+      return observer(undefined, {
+        events: events,
+        lastEvent: lastEvent
+      });
+    });
+    this.events = [];
+    this.observers = [];
+  };
+
+  _createClass(Observable, [{
+    key: "namespace",
+    set: function set(namespace) {
+      this._namespace = namespace; // istanbul ignore next
+
+      if (!this.events) this.events = []; // istanbul ignore next
+
+      if (!this.observers) this.observers = [];
+    }
+  }, {
+    key: "events",
+    get: function get() {
+      return window[SHARED][EVENTS][this._namespace];
+    },
+    set: function set(newEvents) {
+      window[SHARED][EVENTS][this._namespace] = newEvents;
+    }
+  }, {
+    key: "observers",
+    get: function get() {
+      return window[SHARED][OBSERVERS][this._namespace];
+    },
+    set: function set(newObservers) {
+      window[SHARED][OBSERVERS][this._namespace] = newObservers;
+    }
+  }]);
+
+  return Observable;
+}();
+
+
+//# sourceMappingURL=windowed-observable.esm.js.map
+
+
+/***/ }),
 
 /***/ "webpack/container/reference/button":
 /*!**************************************************************!*\
@@ -7,7 +149,6 @@
   \**************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-"use strict";
 var __webpack_error__ = new Error();
 module.exports = new Promise((resolve, reject) => {
 	if(typeof button !== "undefined") return resolve();
@@ -22,6 +163,75 @@ module.exports = new Promise((resolve, reject) => {
 		reject(__webpack_error__);
 	}, "button");
 }).then(() => (button));
+
+/***/ }),
+
+/***/ "webpack/container/reference/calendar":
+/*!****************************************************************!*\
+  !*** external "calendar@http://localhost:5000/remoteEntry.js" ***!
+  \****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var __webpack_error__ = new Error();
+module.exports = new Promise((resolve, reject) => {
+	if(typeof calendar !== "undefined") return resolve();
+	__webpack_require__.l("http://localhost:5000/remoteEntry.js", (event) => {
+		if(typeof calendar !== "undefined") return resolve();
+		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+		var realSrc = event && event.target && event.target.src;
+		__webpack_error__.message = 'Loading script failed.\n(' + errorType + ': ' + realSrc + ')';
+		__webpack_error__.name = 'ScriptExternalLoadError';
+		__webpack_error__.type = errorType;
+		__webpack_error__.request = realSrc;
+		reject(__webpack_error__);
+	}, "calendar");
+}).then(() => (calendar));
+
+/***/ }),
+
+/***/ "webpack/container/reference/modal":
+/*!*************************************************************!*\
+  !*** external "modal@http://localhost:6001/remoteEntry.js" ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var __webpack_error__ = new Error();
+module.exports = new Promise((resolve, reject) => {
+	if(typeof modal !== "undefined") return resolve();
+	__webpack_require__.l("http://localhost:6001/remoteEntry.js", (event) => {
+		if(typeof modal !== "undefined") return resolve();
+		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+		var realSrc = event && event.target && event.target.src;
+		__webpack_error__.message = 'Loading script failed.\n(' + errorType + ': ' + realSrc + ')';
+		__webpack_error__.name = 'ScriptExternalLoadError';
+		__webpack_error__.type = errorType;
+		__webpack_error__.request = realSrc;
+		reject(__webpack_error__);
+	}, "modal");
+}).then(() => (modal));
+
+/***/ }),
+
+/***/ "webpack/container/reference/pomodoro":
+/*!****************************************************************!*\
+  !*** external "pomodoro@http://localhost:9000/remoteEntry.js" ***!
+  \****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var __webpack_error__ = new Error();
+module.exports = new Promise((resolve, reject) => {
+	if(typeof pomodoro !== "undefined") return resolve();
+	__webpack_require__.l("http://localhost:9000/remoteEntry.js", (event) => {
+		if(typeof pomodoro !== "undefined") return resolve();
+		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+		var realSrc = event && event.target && event.target.src;
+		__webpack_error__.message = 'Loading script failed.\n(' + errorType + ': ' + realSrc + ')';
+		__webpack_error__.name = 'ScriptExternalLoadError';
+		__webpack_error__.type = errorType;
+		__webpack_error__.request = realSrc;
+		reject(__webpack_error__);
+	}, "pomodoro");
+}).then(() => (pomodoro));
 
 /***/ })
 
@@ -196,15 +406,39 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 	/* webpack/runtime/remotes loading */
 /******/ 	(() => {
 /******/ 		var chunkMapping = {
+/******/ 			"webpack_container_remote_modal_Renderer": [
+/******/ 				"webpack/container/remote/modal/Renderer"
+/******/ 			],
+/******/ 			"webpack_container_remote_calendar_Bootstrap": [
+/******/ 				"webpack/container/remote/calendar/Bootstrap"
+/******/ 			],
 /******/ 			"webpack_container_remote_button_Button": [
 /******/ 				"webpack/container/remote/button/Button"
+/******/ 			],
+/******/ 			"webpack_container_remote_pomodoro_Pomodoro": [
+/******/ 				"webpack/container/remote/pomodoro/Pomodoro"
 /******/ 			]
 /******/ 		};
 /******/ 		var idToExternalAndNameMapping = {
+/******/ 			"webpack/container/remote/modal/Renderer": [
+/******/ 				"default",
+/******/ 				"./Renderer",
+/******/ 				"webpack/container/reference/modal"
+/******/ 			],
+/******/ 			"webpack/container/remote/calendar/Bootstrap": [
+/******/ 				"default",
+/******/ 				"./Bootstrap",
+/******/ 				"webpack/container/reference/calendar"
+/******/ 			],
 /******/ 			"webpack/container/remote/button/Button": [
 /******/ 				"default",
 /******/ 				"./Button",
 /******/ 				"webpack/container/reference/button"
+/******/ 			],
+/******/ 			"webpack/container/remote/pomodoro/Pomodoro": [
+/******/ 				"default",
+/******/ 				"./Pomodoro",
+/******/ 				"webpack/container/reference/pomodoro"
 /******/ 			]
 /******/ 		};
 /******/ 		__webpack_require__.f.remotes = (chunkId, promises) => {
@@ -291,7 +525,10 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 			var promises = [];
 /******/ 			switch(name) {
 /******/ 				case "default": {
+/******/ 					initExternal("webpack/container/reference/modal");
+/******/ 					initExternal("webpack/container/reference/calendar");
 /******/ 					initExternal("webpack/container/reference/button");
+/******/ 					initExternal("webpack/container/reference/pomodoro");
 /******/ 				}
 /******/ 				break;
 /******/ 			}
@@ -417,17 +654,119 @@ var __webpack_exports__ = {};
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-console.log("hola");
-const target = document.getElementById("root"); // const renderer = import('modal/Renderer')
-// const angular = import("calendar/Component");
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var windowed_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! windowed-observable */ "./node_modules/windowed-observable/dist/windowed-observable.esm.js");
 
-const vanillaButton = __webpack_require__.e(/*! import() */ "webpack_container_remote_button_Button").then(__webpack_require__.t.bind(__webpack_require__, /*! button/Button */ "webpack/container/remote/button/Button", 23)); // renderer.then(res=> res.renderInVanilla(target))
+const target = document.getElementById("root");
+const renderer = __webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23)); // const angular = import("calendar/Dist");
 
-/* angular.then((res) => {
+const bootstrap = __webpack_require__.e(/*! import() */ "webpack_container_remote_calendar_Bootstrap").then(__webpack_require__.t.bind(__webpack_require__, /*! calendar/Bootstrap */ "webpack/container/remote/calendar/Bootstrap", 23));
+const vanillaButton = __webpack_require__.e(/*! import() */ "webpack_container_remote_button_Button").then(__webpack_require__.t.bind(__webpack_require__, /*! button/Button */ "webpack/container/remote/button/Button", 23));
+const pomodoro = __webpack_require__.e(/*! import() */ "webpack_container_remote_pomodoro_Pomodoro").then(__webpack_require__.t.bind(__webpack_require__, /*! pomodoro/Pomodoro */ "webpack/container/remote/pomodoro/Pomodoro", 23));
+const calendarObservable = new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable('calendar-date');
+renderer.then(res => res.renderInVanilla(target));
+vanillaButton.then(res => {
+  const {
+    button
+  } = res.buttonF();
+  document.getElementById("rootVanilla").append(button);
+});
+bootstrap.then(res => {
+  const {
+    calendar,
+    button
+  } = res.component();
+  const target2 = document.getElementById("rootAngular");
+  calendar.srcData = [{
+    AccountName: 'Itexico',
+    ActivityDate: '2022-05-06T09:35:04',
+    ActivityID: 0,
+    CategoryName: 'Available',
+    Comments: 'string',
+    EmployeeID: 0,
+    ProjectColor: 'blue',
+    ProjectID: 0,
+    ProjectName: 'Delivery',
+    StepID: 0,
+    Task: 'esto es un ticket',
+    TypeID: 0,
+    value: 5,
+    activeInProject: false
+  }, {
+    AccountName: 'Itexico',
+    ActivityDate: '2022-05-06T09:35:04',
+    ActivityID: 0,
+    CategoryName: 'Available',
+    Comments: 'string',
+    EmployeeID: 0,
+    ProjectColor: 'blue',
+    ProjectID: 0,
+    ProjectName: 'Delivery',
+    StepID: 0,
+    Task: 'esto es un ticket',
+    TypeID: 0,
+    value: 5,
+    activeInProject: false
+  }, {
+    AccountName: 'Itexico',
+    ActivityDate: '2022-05-06T09:35:04',
+    ActivityID: 0,
+    CategoryName: 'Available',
+    Comments: 'string',
+    EmployeeID: 0,
+    ProjectColor: 'blue',
+    ProjectID: 0,
+    ProjectName: 'Delivery',
+    StepID: 0,
+    Task: 'esto es un ticket',
+    TypeID: 0,
+    value: 5,
+    activeInProject: false
+  }, {
+    AccountName: 'Itexico',
+    ActivityDate: '2022-05-06T09:35:04',
+    ActivityID: 0,
+    CategoryName: 'Available',
+    Comments: 'string',
+    EmployeeID: 0,
+    ProjectColor: 'blue',
+    ProjectID: 0,
+    ProjectName: 'Delivery',
+    StepID: 0,
+    Task: 'esto es un ticket',
+    TypeID: 0,
+    value: 5,
+    activeInProject: false
+  }, {
+    AccountName: 'Itexico',
+    ActivityDate: '2022-05-06T09:35:04',
+    ActivityID: 0,
+    CategoryName: 'Available',
+    Comments: 'string',
+    EmployeeID: 0,
+    ProjectColor: 'blue',
+    ProjectID: 0,
+    ProjectName: 'Delivery',
+    StepID: 0,
+    Task: 'esto es un ticket',
+    TypeID: 0,
+    value: 5,
+    activeInProject: false
+  }];
+  calendar.currentDate = new Date();
+  calendarObservable.subscribe(date => {
+    calendar.currentDate = date;
+    console.log(date, calendar.currentDate);
+  });
+  button.style.position = 'fixed';
+  button.style.bottom = '80px';
+  button.style.right = '100px';
+  target2.append(calendar, button);
+}).catch(err => console.log(err.message));
+pomodoro.then(res => {
+  res.mount();
   console.log(res);
-}); */
-
-vanillaButton.then(res => console.log(res));
+});
 })();
 
 /******/ })()

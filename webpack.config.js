@@ -37,6 +37,7 @@ module.exports = {
         modal: "modal@http://localhost:6001/remoteEntry.js",
         calendar: "calendar@http://localhost:5000/remoteEntry.js",
         button: "button@http://localhost:4500/remoteEntry.js",
+        pomodoro:"pomodoro@http://localhost:9000/remoteEntry.js"
       },
     }),
   ],
