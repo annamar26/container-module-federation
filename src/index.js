@@ -1,7 +1,6 @@
 import { Observable } from "windowed-observable";
-const target = document.getElementById("root");
+const target = document.getElementById("rootReact");
 const renderer = import("modal/Renderer");
-// const angular = import("calendar/Dist");
 const bootstrap = import("calendar/Bootstrap");
 const vanillaButton = import("button/Button");
 const pomodoro = import("pomodoro/Pomodoro");
@@ -115,5 +114,5 @@ bootstrap
   .catch((err) => console.log(err.message));
 pomodoro.then(res=>{
  console.log(res)
-res.mount('#root')
+res.mount('#rootVue')
 })
