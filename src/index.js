@@ -1,19 +1,32 @@
-import { Observable } from "windowed-observable";
-const { generalFetch } = require("./app");
-const target = document.getElementById("rootReact");
-const renderer = import("modal/Renderer");
-const bootstrap = import("calendar/Bootstrap");
+import { Observable } from 'windowed-observable';
+const { generalFetch } = require('./app');
+const target = document.getElementById('rootReact');
+const renderer = import('modal/Renderer');
+const bootstrap = import('calendar/Bootstrap');
 /* const vanillaButton = import("button/Button");
 const pomodoro = import("pomodoro/Pomodoro"); */
-const calendarObservable = new Observable("calendar-date");
+const calendarObservable = new Observable('calendar-date');
 
 // peticion y guardado en localstorage
-const data = async()=>{
-  const fData = await generalFetch({ path: "nova-api/activities", method: "GET" })
-  return fData
+const calendarData = async () => {
+  const fData = await generalFetch({
+    path: 'nova-api/activities',
+    method: 'GET',
+  });
+  return fData;
 };
 
-renderer.then((res) => res.renderInVanilla(target));
+const modalData = async () => {
+  const fData = await generalFetch({
+    path: 'nova-api/projects',
+    method: 'GET',
+  });
+  return fData;
+};
+
+renderer.then(async (res) => {
+  res.renderInVanilla(target, { projects: await modalData() });
+});
 /* vanillaButton.then((res) => {
   const { button } = res.buttonF();
   document.getElementById("rootVanilla").append(button);
@@ -22,7 +35,7 @@ renderer.then((res) => res.renderInVanilla(target));
 bootstrap
   .then(async (res) => {
     const { calendar, button } = res.component();
-    const target2 = document.getElementById("rootAngular");
+    const target2 = document.getElementById('rootAngular');
 
     /* // peticion y guardado en localstorage
     generalFetch({ path: "nova-api/activities", method: "GET" })
@@ -34,14 +47,14 @@ bootstrap
         })
         .catch((err) => console.log(err)); */
 
-    calendar.srcData = await data();
+    calendar.srcData = await calendarData();
     calendar.currentDate = new Date();
     calendarObservable.subscribe((date) => {
       calendar.currentDate = date;
     });
-    button.style.position = "fixed";
-    button.style.bottom = "80px";
-    button.style.right = "100px";
+    button.style.position = 'fixed';
+    button.style.bottom = '80px';
+    button.style.right = '100px';
     target2.append(calendar, button);
   })
   .catch((err) => console.log(err.message));
