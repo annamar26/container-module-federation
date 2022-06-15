@@ -7,6 +7,9 @@ const bootstrap = import('calendar/Bootstrap');
 const pomodoro = import("pomodoro/Pomodoro"); */
 const calendarObservable = new Observable('calendar-date');
 
+const apiObservable = new Observable('api-observable')
+
+
 // peticion y guardado en localstorage
 const calendarData = async () => {
   const fData = await generalFetch({
@@ -21,7 +24,7 @@ const modalData = async () => {
     path: 'nova-api/projects',
     method: 'GET',
   });
-  console.log(fData)
+
   return fData;
  
 };
@@ -51,6 +54,9 @@ bootstrap
         .catch((err) => console.log(err)); */
 
     calendar.srcData = await calendarData();
+    apiObservable.subscribe(async()=>{
+      calendar.srcData = await calendarData();
+    })
     calendar.currentDate = new Date();
     calendarObservable.subscribe((date) => {
       calendar.currentDate = date;
