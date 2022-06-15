@@ -1,12 +1,13 @@
-export async function generalFetch({ path, method/* , body */ }) {
+export async function generalFetch({ path, method, body  }) {
+
   const res = await fetch("http://localhost:6500/" + path, {
     method,
-    // body: JSON.stringify(body),
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },
   });
-//   if (!body) delete res.body
+if (!body) delete res.body
   return res.json();
 }
 

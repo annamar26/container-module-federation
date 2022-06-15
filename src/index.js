@@ -21,11 +21,14 @@ const modalData = async () => {
     path: 'nova-api/projects',
     method: 'GET',
   });
+  console.log(fData)
   return fData;
+ 
 };
 
 renderer.then(async (res) => {
-  res.renderInVanilla(target, { projects: await modalData() });
+  
+  res.renderInVanilla(target, await modalData(), generalFetch);
 });
 /* vanillaButton.then((res) => {
   const { button } = res.buttonF();
