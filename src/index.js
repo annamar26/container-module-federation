@@ -8,6 +8,26 @@ const pomodoro = import("pomodoro/Pomodoro"); */
 const calendarObservable = new Observable('calendar-date');
 
 const apiObservable = new Observable('api-observable')
+const activityToDeleteObservable = new Observable('activity-to-delete')
+const deleteObservable = new Observable('delete-observable')
+const snackbarObservable = new Observable('snackbar-observable')
+let activityToDelete = {}
+activityToDeleteObservable.subscribe((res)=>{
+  activityToDelete = res
+ 
+})
+
+deleteObservable.subscribe(()=>{
+generalFetch({
+path: `nova-api/activities/${activityToDelete._id}`,
+method: 'DELETE',
+
+}).then((res)=>{
+  snackbarObservable.publish({message: res.message, type:'default', success:true})
+   apiObservable.publish('GET')
+}).catch(()=>{
+  snackbarObservable.publish({message: "Something went wrong, please try again", type:'default', success:false})
+})})
 
 
 // peticion y guardado en localstorage
