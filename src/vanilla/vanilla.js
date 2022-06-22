@@ -1,6 +1,9 @@
-/* const vanillaButton = import("button/Button"); */
+const vanillaHeader = import("button/Button");
 
-/* vanillaButton.then((res) => {
-  const { button } = res.buttonF();
-  document.getElementById("rootVanilla").append(button);
-}); */
+const vanilla = () =>
+  vanillaHeader.then((res) => {
+    const { header } = res.headerF();
+    document.getElementById("rootVanilla").append(header);
+  });
+
+export default vanilla;
