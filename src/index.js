@@ -1,3 +1,4 @@
+import('./index.css')
 import react from "./react/react";
 import angular from "./angular/angular";
 import vanilla from "./vanilla/vanilla";

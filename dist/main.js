@@ -2,6 +2,201 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/angular/angular.js":
+/*!********************************!*\
+  !*** ./src/angular/angular.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _observables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observables */ "./src/observables.js");
+/* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fetch */ "./src/fetch.js");
+
+
+
+function buttonStyles(button) {
+  button.style.position = "fixed";
+  button.style.bottom = "80px";
+  button.style.right = "100px";
+}
+
+const bootstrap = __webpack_require__.e(/*! import() */ "webpack_container_remote_calendar_Bootstrap").then(__webpack_require__.t.bind(__webpack_require__, /*! calendar/Bootstrap */ "webpack/container/remote/calendar/Bootstrap", 23));
+
+const angular = () => bootstrap.then(async res => {
+  const {
+    calendar,
+    button
+  } = res.component();
+  calendar.srcData = await (0,_fetch__WEBPACK_IMPORTED_MODULE_1__.calendarData)();
+  _observables__WEBPACK_IMPORTED_MODULE_0__.observables.getApi$.subscribe(async () => {
+    calendar.srcData = await (0,_fetch__WEBPACK_IMPORTED_MODULE_1__.calendarData)();
+  });
+  calendar.currentDate = new Date();
+  _observables__WEBPACK_IMPORTED_MODULE_0__.observables.calendar$.subscribe(date => {
+    calendar.currentDate = date;
+  });
+  buttonStyles(button);
+  document.getElementById("rootAngular").append(calendar, button);
+}).catch(err => console.log(err.message));
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (angular);
+
+/***/ }),
+
+/***/ "./src/fetch.js":
+/*!**********************!*\
+  !*** ./src/fetch.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "calendarData": () => (/* binding */ calendarData),
+/* harmony export */   "deleteActivity": () => (/* binding */ deleteActivity),
+/* harmony export */   "generalFetch": () => (/* binding */ generalFetch),
+/* harmony export */   "modalData": () => (/* binding */ modalData)
+/* harmony export */ });
+/* harmony import */ var _observables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./observables */ "./src/observables.js");
+
+
+async function generalFetch({
+  path,
+  method,
+  body
+}) {
+  const res = await fetch("http://localhost:6500/" + path, {
+    method,
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  if (!body) delete res.body;
+  return res.json();
+}
+const calendarData = async () => {
+  const fData = await generalFetch({
+    path: "nova-api/activities",
+    method: "GET"
+  });
+  return fData;
+};
+const modalData = async () => {
+  const fData = await generalFetch({
+    path: "nova-api/projects",
+    method: "GET"
+  });
+  return fData;
+};
+const deleteActivity = () => generalFetch({
+  path: `nova-api/activities/${_observables__WEBPACK_IMPORTED_MODULE_0__.activitiesOperations.activityToDelete._id}`,
+  method: "DELETE"
+}).then(res => {
+  _observables__WEBPACK_IMPORTED_MODULE_0__.observables.snackbar$.publish({
+    message: res.message,
+    type: "default",
+    success: true
+  });
+  _observables__WEBPACK_IMPORTED_MODULE_0__.observables.getApi$.publish("GET");
+}).catch(() => {
+  _observables__WEBPACK_IMPORTED_MODULE_0__.observables.snackbar$.publish({
+    message: "Something went wrong, please try again",
+    type: "default",
+    success: false
+  });
+});
+
+/***/ }),
+
+/***/ "./src/observables.js":
+/*!****************************!*\
+  !*** ./src/observables.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "activitiesOperations": () => (/* binding */ activitiesOperations),
+/* harmony export */   "observables": () => (/* binding */ observables),
+/* harmony export */   "publications": () => (/* binding */ publications)
+/* harmony export */ });
+/* harmony import */ var windowed_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! windowed-observable */ "./node_modules/windowed-observable/dist/windowed-observable.esm.js");
+
+const observables = {
+  calendar$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("calendar-date"),
+  snackbar$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("snackbar-observable"),
+  getApi$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("api-observable"),
+  deleteApi$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("delete-observable"),
+  activityToDelete$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("activity-to-delete"),
+  createApi$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("create-observable"),
+  activityToCreate$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("activity-to-create"),
+  updateApi$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("update-observable"),
+  activityToUpdate$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("activity-to-update"),
+  cloneApi$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("clone-observable"),
+  activityToClone$: new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable("activity-to-clone")
+};
+const activitiesOperations = {
+  activityToDelete: {},
+  activityToUpdate: {},
+  activityToClone: {},
+  activityToCreate: {}
+};
+const publications = {
+  snackbar: object => observabes.snackbar$.publish(object),
+  getApi: () => observabes.getApi$.publish('GET')
+};
+
+/***/ }),
+
+/***/ "./src/react/react.js":
+/*!****************************!*\
+  !*** ./src/react/react.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../fetch */ "./src/fetch.js");
+
+const renderer = __webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23));
+const target = document.getElementById("rootReact");
+
+const react = () => renderer.then(async res => {
+  res.renderInVanilla(target, await (0,_fetch__WEBPACK_IMPORTED_MODULE_0__.modalData)(), _fetch__WEBPACK_IMPORTED_MODULE_0__.generalFetch);
+});
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (react);
+
+/***/ }),
+
+/***/ "./src/vanilla/vanilla.js":
+/*!********************************!*\
+  !*** ./src/vanilla/vanilla.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const vanillaHeader = __webpack_require__.e(/*! import() */ "webpack_container_remote_button_Button").then(__webpack_require__.t.bind(__webpack_require__, /*! button/Button */ "webpack/container/remote/button/Button", 23));
+
+const vanilla = () => vanillaHeader.then(res => {
+  const {
+    header
+  } = res.headerF();
+  document.getElementById("rootVanilla").append(header);
+});
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vanilla);
+
+/***/ }),
+
 /***/ "./node_modules/windowed-observable/dist/windowed-observable.esm.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/windowed-observable/dist/windowed-observable.esm.js ***!
@@ -210,29 +405,6 @@ module.exports = new Promise((resolve, reject) => {
 	}, "modal");
 }).then(() => (modal));
 
-/***/ }),
-
-/***/ "webpack/container/reference/pomodoro":
-/*!****************************************************************!*\
-  !*** external "pomodoro@http://localhost:9000/remoteEntry.js" ***!
-  \****************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var __webpack_error__ = new Error();
-module.exports = new Promise((resolve, reject) => {
-	if(typeof pomodoro !== "undefined") return resolve();
-	__webpack_require__.l("http://localhost:9000/remoteEntry.js", (event) => {
-		if(typeof pomodoro !== "undefined") return resolve();
-		var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-		var realSrc = event && event.target && event.target.src;
-		__webpack_error__.message = 'Loading script failed.\n(' + errorType + ': ' + realSrc + ')';
-		__webpack_error__.name = 'ScriptExternalLoadError';
-		__webpack_error__.type = errorType;
-		__webpack_error__.request = realSrc;
-		reject(__webpack_error__);
-	}, "pomodoro");
-}).then(() => (pomodoro));
-
 /***/ })
 
 /******/ 	});
@@ -249,7 +421,7 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
+/******/ 			id: moduleId,
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
@@ -265,6 +437,18 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/create fake namespace object */
 /******/ 	(() => {
 /******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
@@ -414,9 +598,6 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 			],
 /******/ 			"webpack_container_remote_button_Button": [
 /******/ 				"webpack/container/remote/button/Button"
-/******/ 			],
-/******/ 			"webpack_container_remote_pomodoro_Pomodoro": [
-/******/ 				"webpack/container/remote/pomodoro/Pomodoro"
 /******/ 			]
 /******/ 		};
 /******/ 		var idToExternalAndNameMapping = {
@@ -434,11 +615,6 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 				"default",
 /******/ 				"./Button",
 /******/ 				"webpack/container/reference/button"
-/******/ 			],
-/******/ 			"webpack/container/remote/pomodoro/Pomodoro": [
-/******/ 				"default",
-/******/ 				"./Pomodoro",
-/******/ 				"webpack/container/reference/pomodoro"
 /******/ 			]
 /******/ 		};
 /******/ 		__webpack_require__.f.remotes = (chunkId, promises) => {
@@ -528,7 +704,6 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 					initExternal("webpack/container/reference/modal");
 /******/ 					initExternal("webpack/container/reference/calendar");
 /******/ 					initExternal("webpack/container/reference/button");
-/******/ 					initExternal("webpack/container/reference/pomodoro");
 /******/ 				}
 /******/ 				break;
 /******/ 			}
@@ -577,7 +752,7 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if("main" == chunkId) {
+/******/ 						if(/^(main|src_index_css)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
 /******/ 							promises.push(installedChunkData[2] = promise);
@@ -647,6 +822,11 @@ module.exports = new Promise((resolve, reject) => {
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
@@ -655,118 +835,24 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var windowed_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! windowed-observable */ "./node_modules/windowed-observable/dist/windowed-observable.esm.js");
+/* harmony import */ var _react_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./react/react */ "./src/react/react.js");
+/* harmony import */ var _angular_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./angular/angular */ "./src/angular/angular.js");
+/* harmony import */ var _vanilla_vanilla__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vanilla/vanilla */ "./src/vanilla/vanilla.js");
+/* harmony import */ var _observables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./observables */ "./src/observables.js");
+/* harmony import */ var _fetch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./fetch */ "./src/fetch.js");
+__webpack_require__.e(/*! import() */ "src_index_css").then(__webpack_require__.bind(__webpack_require__, /*! ./index.css */ "./src/index.css"));
 
-const target = document.getElementById("root");
-const renderer = __webpack_require__.e(/*! import() */ "webpack_container_remote_modal_Renderer").then(__webpack_require__.t.bind(__webpack_require__, /*! modal/Renderer */ "webpack/container/remote/modal/Renderer", 23)); // const angular = import("calendar/Dist");
 
-const bootstrap = __webpack_require__.e(/*! import() */ "webpack_container_remote_calendar_Bootstrap").then(__webpack_require__.t.bind(__webpack_require__, /*! calendar/Bootstrap */ "webpack/container/remote/calendar/Bootstrap", 23));
-const vanillaButton = __webpack_require__.e(/*! import() */ "webpack_container_remote_button_Button").then(__webpack_require__.t.bind(__webpack_require__, /*! button/Button */ "webpack/container/remote/button/Button", 23));
-const pomodoro = __webpack_require__.e(/*! import() */ "webpack_container_remote_pomodoro_Pomodoro").then(__webpack_require__.t.bind(__webpack_require__, /*! pomodoro/Pomodoro */ "webpack/container/remote/pomodoro/Pomodoro", 23));
-const calendarObservable = new windowed_observable__WEBPACK_IMPORTED_MODULE_0__.Observable('calendar-date');
-renderer.then(res => res.renderInVanilla(target));
-vanillaButton.then(res => {
-  const {
-    button
-  } = res.buttonF();
-  document.getElementById("rootVanilla").append(button);
+
+
+
+(0,_vanilla_vanilla__WEBPACK_IMPORTED_MODULE_2__["default"])();
+(0,_angular_angular__WEBPACK_IMPORTED_MODULE_1__["default"])();
+(0,_react_react__WEBPACK_IMPORTED_MODULE_0__["default"])();
+_observables__WEBPACK_IMPORTED_MODULE_3__.observables.activityToDelete$.subscribe(res => {
+  _observables__WEBPACK_IMPORTED_MODULE_3__.activitiesOperations.activityToDelete = res;
 });
-bootstrap.then(res => {
-  const {
-    calendar,
-    button
-  } = res.component();
-  const target2 = document.getElementById("rootAngular");
-  calendar.srcData = [{
-    AccountName: 'Itexico',
-    ActivityDate: '2022-05-06T09:35:04',
-    ActivityID: 0,
-    CategoryName: 'Available',
-    Comments: 'string',
-    EmployeeID: 0,
-    ProjectColor: 'blue',
-    ProjectID: 0,
-    ProjectName: 'Delivery',
-    StepID: 0,
-    Task: 'esto es un ticket',
-    TypeID: 0,
-    value: 5,
-    activeInProject: false
-  }, {
-    AccountName: 'Itexico',
-    ActivityDate: '2022-05-06T09:35:04',
-    ActivityID: 0,
-    CategoryName: 'Available',
-    Comments: 'string',
-    EmployeeID: 0,
-    ProjectColor: 'blue',
-    ProjectID: 0,
-    ProjectName: 'Delivery',
-    StepID: 0,
-    Task: 'esto es un ticket',
-    TypeID: 0,
-    value: 5,
-    activeInProject: false
-  }, {
-    AccountName: 'Itexico',
-    ActivityDate: '2022-05-06T09:35:04',
-    ActivityID: 0,
-    CategoryName: 'Available',
-    Comments: 'string',
-    EmployeeID: 0,
-    ProjectColor: 'blue',
-    ProjectID: 0,
-    ProjectName: 'Delivery',
-    StepID: 0,
-    Task: 'esto es un ticket',
-    TypeID: 0,
-    value: 5,
-    activeInProject: false
-  }, {
-    AccountName: 'Itexico',
-    ActivityDate: '2022-05-06T09:35:04',
-    ActivityID: 0,
-    CategoryName: 'Available',
-    Comments: 'string',
-    EmployeeID: 0,
-    ProjectColor: 'blue',
-    ProjectID: 0,
-    ProjectName: 'Delivery',
-    StepID: 0,
-    Task: 'esto es un ticket',
-    TypeID: 0,
-    value: 5,
-    activeInProject: false
-  }, {
-    AccountName: 'Itexico',
-    ActivityDate: '2022-05-06T09:35:04',
-    ActivityID: 0,
-    CategoryName: 'Available',
-    Comments: 'string',
-    EmployeeID: 0,
-    ProjectColor: 'blue',
-    ProjectID: 0,
-    ProjectName: 'Delivery',
-    StepID: 0,
-    Task: 'esto es un ticket',
-    TypeID: 0,
-    value: 5,
-    activeInProject: false
-  }];
-  calendar.currentDate = new Date();
-  calendarObservable.subscribe(date => {
-    calendar.currentDate = date;
-    console.log(date, calendar.currentDate);
-  });
-  button.style.position = 'fixed';
-  button.style.bottom = '80px';
-  button.style.right = '100px';
-  target2.append(calendar, button);
-}).catch(err => console.log(err.message));
-pomodoro.then(res => {
-  res.mount();
-  console.log(res);
-});
+_observables__WEBPACK_IMPORTED_MODULE_3__.observables.deleteApi$.subscribe(() => (0,_fetch__WEBPACK_IMPORTED_MODULE_4__.deleteActivity)());
 })();
 
 /******/ })()
