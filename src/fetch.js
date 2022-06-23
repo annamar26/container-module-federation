@@ -1,5 +1,6 @@
 import { observables } from "./observables";
 import { activitiesOperations } from "./observables";
+import { Home } from "./views/home";
 
 export async function generalFetch({ path, method, body }) {
   const res = await fetch("http://localhost:6500/" + path, {
@@ -15,7 +16,7 @@ export async function generalFetch({ path, method, body }) {
 
 export const calendarData = async () => {
   const fData = await generalFetch({
-    path: "nova-api/activities",
+    path: `nova-api/activities?employee=${sessionStorage.getItem('id')}`,
     method: "GET",
   });
   return fData;
@@ -48,4 +49,18 @@ export const deleteActivity = () =>
         type: "default",
         success: false,
       });
+    });
+export const loginF = (body) =>
+  generalFetch({
+    path: `nova-api/login`,
+    method: "POST",
+    body: body
+   
+  })
+    .then((res) => {
+      sessionStorage.setItem("id", res._id);
+      Home();
+    })
+    .catch((error) => {
+     console.log(error)
     });
