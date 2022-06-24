@@ -1,3 +1,7 @@
-import { Login } from "./views/login";
+import { dispatchRoute } from "./routes";
 
-Login()
+
+window.history.pushState({}, '/auth', window.location.origin + '/auth')
+dispatchRoute('/auth')
+
+

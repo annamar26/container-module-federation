@@ -1,4 +1,4 @@
-import("./../index.css");
+
 import { loginF } from "../fetch";
 
 export const Login = () => {

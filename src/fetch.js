@@ -1,5 +1,6 @@
 import { observables } from "./observables";
 import { activitiesOperations } from "./observables";
+import { dispatchRoute, onNavigate } from "./routes";
 import { Home } from "./views/home";
 
 export async function generalFetch({ path, method, body }) {
@@ -59,7 +60,8 @@ export const loginF = (body) =>
   })
     .then((res) => {
       sessionStorage.setItem("id", res._id);
-      Home();
+      dispatchRoute('/')
+      window.history.pushState({}, '/', window.location.origin + '/')
     })
     .catch((error) => {
      console.log(error)
